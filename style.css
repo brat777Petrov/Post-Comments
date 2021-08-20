@@ -1,0 +1,72 @@
+ main {
+   background-color: rgba(54, 209, 92);
+ }
+ 
+ .post {
+   width: 360px;
+   height: 40px;
+   margin: 10px;
+
+   font-weight: bold;
+   border: 2px solid black;
+   border-radius: 5px;
+   background-color: yellow;
+
+   cursor: pointer;
+ }
+
+ .onePost {
+   position: fixed;
+   width: 500px;
+   height: 75px;
+   left: 40%;
+   top: 20px;
+   padding: 5px;
+
+   font-weight: bold;
+   border: 2px solid black;
+   border-radius: 5px;
+   background-color: aqua;
+ }
+
+ .commentBtn {
+  position: fixed;
+  width: 250px;
+  height: 45px;
+  left: 80%;
+  top: 40px;
+  padding: 5px;
+
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: aqua;
+  cursor: pointer;
+ }
+
+ #panelComments {
+  position: fixed;
+  width: 500px;
+  height: 730px;
+  left: 40%;
+  top: 120px;
+  padding: 5px;
+
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: yellow;
+ }
+
+ .comment {
+  width: 350px;
+  height: 120px;
+  margin: 10px auto;
+  
+  padding: 5px;
+
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: aqua;
+
+ }
