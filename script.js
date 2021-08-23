@@ -50,7 +50,21 @@ function httpGetRequest(url, params, callback) {
       for ( let j = 0; j < 4; j++ ) {
         fiveWords += arrWords[j] + ' ';
       }
-      post.innerHTML = data[i].id + '   ' + fiveWords;
+
+      const postNumber = document.createElement('p');
+      const postTitle = document.createElement('p');
+      const postBody = document.createElement('p');
+      postNumber.className = 'postNumber';
+      postTitle.className ='postTitle';
+      postBody.className = 'postBody';
+
+      post.append(postNumber);
+      post.append(postTitle);
+      post.append(postBody);
+
+      postNumber.innerHTML = data[i].id + ' ';
+      postTitle.innerHTML =  data[i].title + "<br/><b>";
+      postBody.innerHTML = "<br/><b>"  + fiveWords + "    ...";
     }
   }
 

@@ -3,23 +3,45 @@
  }
  
  .post {
-   width: 360px;
-   height: 40px;
-   margin: 10px;
+  width: 550px;
+  height: 100px;
+  margin: 10px;
 
-   font-weight: bold;
-   border: 2px solid black;
-   border-radius: 5px;
-   background-color: yellow;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: yellow;
 
-   cursor: pointer;
- }
+  cursor: pointer;
+  }
+
+  .postNumber {
+  margin: 5px;
+  color: green;
+  }
+
+  .postTitle {
+    position: relative;
+    margin: 5px;
+    top: -25px;
+    left: 15px;
+
+    color: blue;
+    font-weight: bold;
+  }
+ 
+  .postBody {
+    position: relative;
+    margin: 5px;
+    top: -25px;
+    left: 15px;
+  }
 
  .onePost {
    position: fixed;
    width: 500px;
    height: 75px;
-   left: 40%;
+   left: 42%;
    top: 20px;
    padding: 5px;
 
@@ -48,7 +70,7 @@
   position: fixed;
   width: 500px;
   height: 730px;
-  left: 40%;
+  left: 42%;
   top: 120px;
   padding: 5px;
 
