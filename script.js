@@ -54,23 +54,23 @@ function httpGetRequest(url, params, callback) {
       const postNumber = document.createElement('p');
       const postTitle = document.createElement('p');
       const postBody = document.createElement('p');
-      postNumber.className = 'postNumber';
-      postTitle.className ='postTitle';
-      postBody.className = 'postBody';
+      postNumber.className = `postNumber ${i}`;
+      postTitle.className =`postTitle ${i}`;
+      postBody.className = `postBody ${i}`;
 
       post.append(postNumber);
       post.append(postTitle);
       post.append(postBody);
 
       postNumber.innerHTML = data[i].id + ' ';
-      postTitle.innerHTML =  data[i].title + "<br/><b>";
-      postBody.innerHTML = "<br/><b>"  + fiveWords + "    ...";
+      postTitle.innerHTML = data[i].title + "<br/><b>";
+      postBody.innerHTML =  fiveWords +    "...";
     }
   }
 
   function openPost (data) {
-   
     const postId = event.target.classList[1];
+    console.log(event.target);
     if (postId) {
       const checkPanel = document.getElementById('panelComments');
       if (checkPanel) {
