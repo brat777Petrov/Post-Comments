@@ -1,17 +1,26 @@
+// *** function *************
 
-  const url = 'https://jsonplaceholder.typicode.com';
-  const main = document.querySelector('main');
-  let flagRemovePanel = false;
-    
-  httpGetRequest(url,'/posts', start);
-  
+  function Main () {
+    httpGetRequest (url,'/posts', function(err, response) {
+      if(err) {
+        console.error(err);
+        alert('error');
+      } else {
+        start(null, response);
+      }
+    })
+  }
+
   function httpGetRequest(url, params, callback) {
     const fullUrl = url + params;
     let x = new XMLHttpRequest();
     x.open("GET", fullUrl);
     x.send();
+
+
+
     x.onload = () => {
-      let data = x.response;
+      const data = JSON.parse(x.response);
       callback(null, data);
      };
     x.onerror = () => {
@@ -19,27 +28,24 @@
     };                  
   }
 
-  function start(z,response) {
-    const data = JSON.parse(response);
-    shortPosts(100, data);
+  function start(err,data) {
+    shortPosts(data);
     main.addEventListener('click', () => {
-     const postId = openPost(data);
+    const postId = openPost(data);
      
     } )
   };
 
-  function shortPosts(n, data) {
-     for ( let i = 0; i < n; i++ ) {
+  function shortPosts(data) {
+    data.map((currentValue,i) => {
       let arrWords = [];
       const post = document.createElement('div');
+      post.classList = (`post`);
+      post.setAttribute("data-id",`${i}`);
       main.append(post);
-      post.classList = (`post ${i}`);
       arrWords = data[i].body.split(' ');
       
-      let fiveWords = '';
-      for ( let j = 0; j < 4; j++ ) {
-        fiveWords += arrWords[j] + ' ';
-      }
+      const  fiveWords = arrWords.slice(0,4).join(' ');
 
       const postNumber = document.createElement('p');
       const postTitle = document.createElement('p');
@@ -48,42 +54,45 @@
       postTitle.className =`postTitle ${i}`;
       postBody.className = `postBody ${i}`;
 
-      post.append(postNumber);
-      post.append(postTitle);
-      post.append(postBody);
-
       postNumber.innerHTML = data[i].id + ' ';
       postTitle.innerHTML = data[i].title + "<br/><b>";
       postBody.innerHTML =  fiveWords +    "...";
-    }
+
+      post.append(postNumber);
+      post.append(postTitle);
+      post.append(postBody);
+    })
   }
 
   function openPost (data) {
-    const postId = event.target.classList[1];
-    if (postId) {
-      const checkPanel = document.getElementById('panelComments');
-      if (checkPanel) {
-        clearComments();
-      }
+    const el = event.target.closest('.post');
+   
+    if (el) {
+      const postId = el.getAttribute("data-id");
+      if (postId) {
+        const checkPanel = document.getElementById('panelComments');
+        if (checkPanel) {
+          clearComments();
+        }
         addCommentBtn(postId);
         const onePost = document.createElement('div');
-        main.append(onePost);
         onePost.classList = ('onePost');
         onePost.innerHTML = data[postId].body;
+        main.append(onePost);
+      }
+      return postId;
     }
-    return postId;
   }
 
   function addCommentBtn(postId) {
     const commentBtn = document.createElement('button');
-    main.append(commentBtn);
     commentBtn.className = ('commentBtn');
     commentBtn.innerHTML = ('Показать коментарии')
+    main.append(commentBtn);
     commentBtn.addEventListener('click', () => {
       
-       httpGetRequest(url,'/comments', (z,response) => {
-        const comments = JSON.parse(response);
-        addComments(postId, comments);
+       httpGetRequest(url,`/posts/${+postId+1}/comments`, (err,comments) => {
+         addComments(postId, comments);
        });
 
     } )
@@ -92,23 +101,27 @@
   function addComments(postId, comments) {
     flagRemovePanel = true;
     const panelComments = document.createElement('div');
-    main.append(panelComments);
     panelComments.id = ('panelComments');
-    const arrCommit = comments.filter( (el) => {
-      return el.postId === ( +postId+1 );
-    })
-   
-    for ( let i = 0; i < arrCommit.length; i++) {
+    main.append(panelComments);
+     
+    comments.forEach(el => {
       const comment = document.createElement('div');
-      main.append(panelComments);
-      panelComments.append(comment);
       comment.className = ('comment');
-      comment.innerHTML = (arrCommit[i].body);
-    }
+      comment.innerHTML = (el.body);
+      panelComments.append(comment);
+    });
+    
+   
   }
 
   function clearComments() {
-   const x = document.getElementById('panelComments');
-   console.log(x);
-    x.remove();
+   document.getElementById('panelComments').remove();
   }
+
+  // ******** end function **************
+
+  const url = 'https://jsonplaceholder.typicode.com';
+  const main = document.querySelector('main');
+  let flagRemovePanel = false;
+  
+  Main();
