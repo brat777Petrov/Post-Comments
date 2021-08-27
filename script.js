@@ -2,42 +2,42 @@
 
   function Main () {
     httpGetRequest (url,'/posts', function(err, response) {
+      console.log('resolve +');
       if(err) {
         console.error(err);
         alert('error');
       } else {
-        start(null, response);
+         start(null, response);
       }
     })
   }
 
-  function httpGetRequest(url, params, callback) {
-    const fullUrl = url + params;
-    let x = new XMLHttpRequest();
-    x.open("GET", fullUrl);
-    x.send();
-
-
-
-    x.onload = () => {
-      const data = JSON.parse(x.response);
-      callback(null, data);
-     };
-    x.onerror = () => {
-      callback(error);
-    };                  
-  }
-
+   function httpGetRequest (url, params, callback) {
+      return new Promise ((resolve, reject) =>{
+        const fullUrl = url + params;
+        let x = new XMLHttpRequest();
+        x.open("GET", fullUrl);
+        x.send();
+        x.onload = () => {
+          const data = JSON.parse(x.response);
+          callback(null, data);
+         };
+        x.onerror = () => {
+          callback(error);
+        };
+      })
+    }
+   
   function start(err,data) {
     shortPosts(data);
     main.addEventListener('click', () => {
     const postId = openPost(data);
      
     } )
-  };
+  }
 
   function shortPosts(data) {
-    data.map((currentValue,i) => {
+    data.forEach((currentValue,i) => {
       let arrWords = [];
       const post = document.createElement('div');
       post.classList = (`post`);
@@ -68,8 +68,8 @@
     const el = event.target.closest('.post');
    
     if (el) {
-      const postId = el.getAttribute("data-id");
-      if (postId) {
+      const postId = el.dataset.id;
+        if (postId) {
         const checkPanel = document.getElementById('panelComments');
         if (checkPanel) {
           clearComments();
@@ -92,7 +92,11 @@
     commentBtn.addEventListener('click', () => {
       
        httpGetRequest(url,`/posts/${+postId+1}/comments`, (err,comments) => {
-         addComments(postId, comments);
+        if (err) {
+          console.error('error');
+        } else {
+          addComments(postId, comments);
+        }
        });
 
     } )
