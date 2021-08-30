@@ -2,12 +2,14 @@
 
   function Main () {
     httpGetRequest (url,'/posts', function(err, response) {
-      console.log('resolve +');
       if(err) {
         console.error(err);
         alert('error');
       } else {
-         start(null, response);
+        shortPosts(response);
+        main.addEventListener('click', () => {
+        const postId = openPost(response);
+        })
       }
     })
   }
@@ -23,18 +25,10 @@
           callback(null, data);
          };
         x.onerror = () => {
-          callback(error);
+        callback(error);
         };
       })
     }
-   
-  function start(err,data) {
-    shortPosts(data);
-    main.addEventListener('click', () => {
-    const postId = openPost(data);
-     
-    } )
-  }
 
   function shortPosts(data) {
     data.forEach((currentValue,i) => {
@@ -98,7 +92,6 @@
           addComments(postId, comments);
         }
        });
-
     } )
   }
 
@@ -114,8 +107,6 @@
       comment.innerHTML = (el.body);
       panelComments.append(comment);
     });
-    
-   
   }
 
   function clearComments() {
