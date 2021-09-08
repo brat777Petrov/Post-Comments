@@ -92,3 +92,9 @@
   background-color: aqua;
 
  }
+
+ .commentStatus {
+   margin: 0;
+   padding-left: 440px;
+   cursor: pointer;
+ }

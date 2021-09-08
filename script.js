@@ -1,7 +1,6 @@
 // *** function *************
 function Main () {
-  const data = loadData (url,'/posts'); 
-        data.then((response) => {
+  loadData (url,'/posts').then((response) => {
             shortPosts(response);
             main.addEventListener('click', () => {
               const postId = openPost(response);});
@@ -10,7 +9,7 @@ function Main () {
 
 
  function loadData (url, params) {
-    return promise = new Promise( (resolve, reject) => {
+    return new Promise( (resolve, reject) => {
       httpGetRequest(url, params,(err, response) => {  
         if (err) {
           reject(err);
@@ -30,11 +29,13 @@ function Main () {
         callback(null, JSON.parse(x.response));
       };
       x.onerror = () => {
-        callback(error);
+        callback('error');
       };
  }
 
   function shortPosts(data) {
+    const commitsUrl = [];
+
     data.forEach((currentValue,i) => {
       let arrWords = [];
       const post = document.createElement('div');
@@ -59,7 +60,11 @@ function Main () {
       post.append(postNumber);
       post.append(postTitle);
       post.append(postBody);
+      commitsUrl[i] = `/posts/${+i+1}/comments`;
+      // https://jsonplaceholder.typicode.com/posts/1/comments
     })
+    const res = loadComments(commitsUrl);
+    console.log(res);
   }
 
   function openPost (data) {
@@ -85,19 +90,15 @@ function Main () {
   function addCommentBtn(postId) {
     const commentBtn = document.createElement('button');
     commentBtn.className = ('commentBtn');
-    commentBtn.innerHTML = ('Показать коментарии')
+    commentBtn.innerHTML = ('Показать коментарии');
     main.append(commentBtn);
     commentBtn.addEventListener('click', () => {
-      httpGetRequest(url,`/posts/${+postId+1}/comments`, (err,comments) => {
-        if (err) {
-          console.error('error');
-          alert('error');
-        } else {
+      loadData (url,`/posts/${+postId+1}/comments`).then((comments) => {
           addComments(postId, comments);
-        }
-       });
-    } )
-  }
+      })
+    });
+  } 
+  
 
   function addComments(postId, comments) {
     flagRemovePanel = true;
@@ -116,6 +117,36 @@ function Main () {
   function clearComments() {
    document.getElementById('panelComments').remove();
   }
+// *****
+  function loadComments(commitsUrl) {
+    const arrCommits = [];
+    let i = -1;
+   
+   return commitsUrl.reduce((promise, param) => {
+      return promise
+        .then(() => { 
+            i++;
+            
+            let el = document.querySelector('.post[data-id = "' + `${i}`+ '"]');
+            const commentStatus = document.createElement('p');
+            commentStatus.className = ('commentStatus commentStatus' + `${i}`);
+            commentStatus.innerHTML = ' ....................... '; 
+            el.append(commentStatus);
+            
+            const r = new Promise((resolve, reject) => {
+             resolve(arrCommits[i] = loadData(url,param));
+            });
+            
+            return r.then(() => { 
+              const elComment = document.querySelector('.commentStatus'+ `${i}`);
+              elComment.innerHTML = ('comment');
+            }); 
+      });
+    },Promise.resolve());
+  }
+
+// *****
+
 
   // ******** end function **************
 
