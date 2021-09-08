@@ -64,7 +64,7 @@ function Main () {
       // https://jsonplaceholder.typicode.com/posts/1/comments
     })
     const res = loadComments(commitsUrl);
-    console.log(res);
+    console.log(arrCommits);
   }
 
   function openPost (data) {
@@ -118,8 +118,9 @@ function Main () {
    document.getElementById('panelComments').remove();
   }
 // *****
+
   function loadComments(commitsUrl) {
-    const arrCommits = [];
+   
     let i = -1;
    
    return commitsUrl.reduce((promise, param) => {
@@ -127,7 +128,7 @@ function Main () {
         .then(() => { 
             i++;
             
-            let el = document.querySelector('.post[data-id = "' + `${i}`+ '"]');
+            const el = document.querySelector('.post[data-id = "' + `${i}`+ '"]');
             const commentStatus = document.createElement('p');
             commentStatus.className = ('commentStatus commentStatus' + `${i}`);
             commentStatus.innerHTML = ' ....................... '; 
@@ -141,6 +142,7 @@ function Main () {
               const elComment = document.querySelector('.commentStatus'+ `${i}`);
               elComment.innerHTML = ('comment');
             }); 
+            
       });
     },Promise.resolve());
   }
@@ -153,5 +155,6 @@ function Main () {
   const url = 'https://jsonplaceholder.typicode.com';
   const main = document.querySelector('main');
   let flagRemovePanel = false;
+  const arrCommits = [];
   
   Main();
