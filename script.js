@@ -22,7 +22,7 @@ function Main () {
 
  function httpGetRequest (url, params, callback) {
       const fullUrl = url + params;
-      let x = new XMLHttpRequest();
+      const x = new XMLHttpRequest();
       x.open("GET", fullUrl);
       x.send();
       x.onload = () => {
@@ -65,6 +65,9 @@ function Main () {
     })
     const res = loadComments(commitsUrl);
     console.log(arrCommits);
+    Promise.all(arrCommits).then(function(res) {
+      console.log(res); 
+    });
   }
 
   function openPost (data) {
@@ -121,12 +124,12 @@ function Main () {
 
   function loadComments(commitsUrl) {
    
-    let i = -1;
    
-   return commitsUrl.reduce((promise, param) => {
+   
+   return commitsUrl.reduce((promise, param, i) => {
       return promise
         .then(() => { 
-            i++;
+            
             
             const el = document.querySelector('.post[data-id = "' + `${i}`+ '"]');
             const commentStatus = document.createElement('p');
@@ -134,11 +137,10 @@ function Main () {
             commentStatus.innerHTML = ' ....................... '; 
             el.append(commentStatus);
             
-            const r = new Promise((resolve, reject) => {
-             resolve(arrCommits[i] = loadData(url,param));
-            });
+          
             
-            return r.then(() => { 
+            return loadData(url,param).then((data) => { 
+              arrCommits.push(data);
               const elComment = document.querySelector('.commentStatus'+ `${i}`);
               elComment.innerHTML = ('comment');
             }); 
